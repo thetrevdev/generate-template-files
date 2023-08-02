@@ -2,7 +2,6 @@ import enquirer from 'enquirer';
 import recursiveCopy from 'recursive-copy';
 import pathExists from 'path-exists';
 import through from 'through2';
-import replaceString from 'replace-string';
 import StringUtility from './utilities/StringUtility';
 import CaseConverterEnum from './constants/CaseConverterEnum';
 import IConfigItem from './models/IConfigItem';
@@ -256,7 +255,7 @@ export default class GenerateTemplateFiles {
     // Create the output path replacing any template keys.
     const outputPathFormatted: string = outputPathReplacers.reduce(
       (outputPath: string, replacer: IReplacer) => {
-        return replaceString(outputPath, replacer.slot, replacer.slotValue);
+        return outputPath.replaceAll(replacer.slot, replacer.slotValue);
       },
       selectedConfigItem.output.path
     );
@@ -337,7 +336,7 @@ export default class GenerateTemplateFiles {
           let formattedFilePath: string = path;
 
           outputPathReplacers.forEach((replacer: IReplacer) => {
-            formattedFilePath = replaceString(formattedFilePath, replacer.slot, replacer.slotValue);
+            formattedFilePath = formattedFilePath.replaceAll(replacer.slot, replacer.slotValue);
           });
 
           return formattedFilePath;
@@ -352,7 +351,7 @@ export default class GenerateTemplateFiles {
           let output: string = chunk.toString();
 
           replacers.forEach((replacer: IReplacer) => {
-            output = replaceString(output, replacer.slot, replacer.slotValue);
+            output = output.replaceAll(replacer.slot, replacer.slotValue);
           });
 
           done(null, output);
